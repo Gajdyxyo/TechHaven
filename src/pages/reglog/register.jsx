@@ -93,7 +93,7 @@ export const Register = () => {
         />
         <TextField
             variant="outlined"
-            label="Přihlašovací jméno"
+            label="Uživatelské jméno"
             id="username"
             name="username"
             fullWidth

@@ -17,6 +17,7 @@ import {Shipping} from './pages/profile/shipping'
 import { AdminSection } from './pages/Admin/adminsection'
 import { AdminProductDetail } from './pages/Admin/AdminProductDetail'
 import { ProductDetail } from './pages/shop/ProductDetail'
+import { AddProduct } from './pages/Admin/AddProduct'
 
 function App() {
   const username = localStorage.getItem('username');
@@ -42,6 +43,7 @@ function App() {
       .then((data) => {
         setProducts(data);
         setLoading(false);
+        console.log(data);
       })
       .catch((error) => {
         console.error('Error pri fetchovani produktu', error);
@@ -70,6 +72,7 @@ function App() {
                     <Route path="/AdminSection" element={<AdminSection PRODUCTS = {PRODUCTS}/>}/>
                     <Route path="/AdminSection/:id" element={<AdminProductDetail />}/>
                     <Route path="/ProductDetail/:id" element={<ProductDetail />}/>
+                    <Route path="/AddProduct" element={<AddProduct/>}/>
                   </Routes>
                   {isLoggedIn ? <LoginAlert username={username}/> : null}
                   {hasInteracted && !isLoggedIn ? <LogoutAlert/> : null}

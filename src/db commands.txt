@@ -1,0 +1,145 @@
+DROP DATABASE techhavendb;
+CREATE DATABASE IF NOT EXISTS techhavendb;
+USE techhavendb;
+CREATE TABLE IF NOT EXISTS users(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(20),
+    email VARCHAR(50),
+    password_hash VARCHAR(255),
+    isAdmin BOOLEAN DEFAULT 0,
+    createDate TIMESTAMP,
+    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS product_images(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    image_url VARCHAR(255)
+);
+CREATE TABLE IF NOT EXISTS category(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE makers( id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR (50) );
+
+CREATE TABLE IF NOT EXISTS products(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    price DECIMAL(10,2),
+    short_desc VARCHAR(100),
+    description VARCHAR(500),
+    category_id INT,
+    maker_id INT,
+    image_id INT,
+    total_stock INT,
+    CONSTRAINT fk_products_product_images FOREIGN KEY(image_id) REFERENCES product_images(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_products_category FOREIGN KEY(category_id) REFERENCES category(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    /*CONSTRAINT fk_products_makers FOREIGN KEY(maker_id) REFERENCES makers(id) ON DELETE CASCADE ON UPDATE CASCADE*/
+);
+CREATE TABLE IF NOT EXISTS payment(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    payment_method VARCHAR(50),
+    transaction_id VARCHAR(255) UNIQUE,
+    amount DECIMAL(10,2),
+    addDate TIMESTAMP,
+    CONSTRAINT fk_payment_users FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS addresses(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    street_address VARCHAR(50),
+    state VARCHAR(50),
+    postal_code VARCHAR(10),
+    CONSTRAINT fk_addresses_users FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS orders(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    address_id INT,
+    payment_id INT,
+    product_id INT,
+    addDate TIMESTAMP,
+    status VARCHAR(50),
+    total_price DECIMAL(10,2),
+    CONSTRAINT fk_orders_users FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_orders_addresses FOREIGN KEY(address_id) REFERENCES addresses(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_orders_payment FOREIGN KEY(payment_id) REFERENCES payment(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_orders_products FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS orderProducts(
+	product_id INT,
+    order_id INT,
+    CONSTRAINT fk_orderProduct_products FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_orderProduct_orders FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS shoppingCart(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+    quantity INT,
+    total_price DECIMAL(10,2),
+    addDate TIMESTAMP,
+    CONSTRAINT fk_shoppingCart_users FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_shoppingCart_products FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE sessions (
+    session_id VARCHAR(255) PRIMARY KEY,
+    user_id INT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO makers(name) VALUES("Hal3000");
+INSERT INTO makers(name) VALUES("Dell");
+INSERT INTO makers(name) VALUES("Apple");
+INSERT INTO makers(name) VALUES("Lenovo");
+INSERT INTO makers(name) VALUES("Samsung");
+
+INSERT INTO category(name) VALUES ("PC");
+INSERT INTO category(name) VALUES ("Laptop");
+INSERT INTO category(name) VALUES("Mobilní telefony");
+INSERT INTO category(name) VALUES("Chytré hodinky");
+
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/djgq93cbfujqf9v02qk08460ee-2_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/580prfn11cg5o8nlbrtsgnovc3-5_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/aufovlcv74igba9gi4qqq3en81-2_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/4b8tsih4tii86atvf279tvl0ng-5_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/8q3jk8mlcsiemake4bdfh5tnda-2_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/8bm5e731righq9rrq3skme3vrg-7_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/054jq5qvpihoo8gat1uu030kna-3_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/filibojh0ojhgbi6vfuimojeed-2_2/obrazek");
+INSERT INTO product_images(image_url) VALUES ("https://iczc.cz/70iddg5cg0hknad3oko3pei9cg-2_2/obrazek");
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Hal3000 MČR Finale PRO 4070', 39999, 1, 1, 1, 10, 'Skvělý herní PC, který zvládá všechny nejnovější AAA tituly','Herní počítač. Hardware: deska ASRock B760M PRO RS/D4 WIFI, 10jádrový procesor Intel Core i5-13400F, 32GB operační paměti DDR4 (zdarma 16GB v rámci bonusu), pevný disk 1TB SSD, grafická karta MSI GeForce RTX 4070 VENTUS 2X OC 12GB GDDR6X, skříň DEEPCOOL CH510, 600W zdroj Endorfy Vero L5 80Plus Bronze. Vybraná výbava: 2.5GLAN, WiFi 6E ax, Bluetooth 5.3, USB (2.0, 3.2 Gen 1, Type-C 3.2 Gen 1), operační systém Windows 11 Home.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ("Dell Vostro (3710) SFF", 15979, 1, 2, 2, 15, "Dobrý PC pro kancelářskou práci.","Počítač. Hardware: 6jádrový procesor Intel Core i5-12400, 16GB operační paměti DDR4, pevný disk 512GB SSD, grafická karta Intel UHD Graphics. Vybraná výbava: mechanika DVD±RW, GLAN, WiFi ac, Bluetooth 5.0, USB (4x 2.0 a 4x 3.2 Gen 1), klávesnice a myš, operační systém Windows 11 Pro.");
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Lenovo IdeaPad Slim 3 16IAH8, šedá', 10900, 2, 4, 4, 11, 'Notebook vhodný jak pro domácí použití tak i do práce. Dobrý kamarád pro Home Office','Notebook, 16" IPS displej (1920 x 1200 bodů). Hardware: 8jádrový procesor Intel Core i5-12450H, 16GB paměti LPDDR5, grafika Intel UHD Graphics, disk 1TB SSD. Vybraná výbava: WiFi 6 ax, Bluetooth 5.1, FHD kamera, čtečka paměťových karet, HDMI, USB (2x 3.2 Gen 1, 1x Type-C 3.2 Gen 1), čtečka otisků prstů, podsvícená klávesnice, operační systém Windows 11 Home.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Apple MacBook Air 13, M1, 8GB, 256GB, 7-core GPU, vesmírně šedá (M1, 2020) (CZ)', 24599, 2, 3, 3, 4, 'Notebook vhodný jak pro domácí použití tak i do práce. Dobrý kamarád pro Home Office','Revoluční Apple MacBook Air s procesorem Apple M1. 13.3" IPS Retina displej 2560 × 1600 bodů s technologií True Tone a širokým barevným rozsahem (P3), 8jádrový procesor Apple M1, 7jádrové GPU, 16jádrový Neural Engine, 8GB RAM, disk 256GB SSD, Wi-Fi ax, Bluetooth 5.0, 2x Thunderbolt / USB 4, kamera FaceTime HD, Touch ID, Force Touch trackpad, klávesnice Magic Keyboard, hliníková konstrukce, operační systém macOS Big Sur.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Apple iMac 24" 4,5K Retina /M3 8-core/8GB/256GB SSD/10-core GPU, stříbrná', 45990, 1, 3, 5, 3, 'All in one počítač od Apple', 'Počítač All in one – iMac, 23.5" 4.5K Retina displej (4480 × 2520 bodů). Hardware: 8jádrový procesor Apple M3 (10jádrové GPU, 16jádrový Neural Engine), 8GB operační paměti, disk 256GB SSD. Vybraná výbava: Wi-Fi 6E ax, Bluetooth 5.3, 2x Thunderbolt/USB4, 2x USB 3.2 Gen2, Gigabit Ethernet, FaceTime HD kamera 1080p, klávesnice Magic Keyboard s Touch ID a myš Magic Mouse, operační systém macOS.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Samsung Galaxy S23, 8GB/256GB, Phantom Black, stříbrná', 19000, 3, 5, 6, 7, 'Mobilní telefon od firmy Samsung. Nabízí vysoce kvalitní Full HD+ displej','Mobilní telefon s 6,1“ Dynamic AMOLED 2X displejem s rozlišením Full HD+. Sklo Gorilla Glass Victus 2. Obnovovací frekvence 48-120 Hz. Fotoaparáty: 50+12+10 MPx. Přední fotoaparát 12 MPx. 8jádrový procesor Snapdragon 8 gen2, 8 GB RAM a 256 GB vnitřní paměť. Kapacita baterie 3900 mAh. Ultrazvukový snímač otisků prstů. Podpora Wi-Fi 6E, Bluetooth v5.3, NFC, 5G. Podpora bezdrátového připojení Samsung DeX. Stereo reproduktory AKG a zvuk Dolby Atmos.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Apple iPhone 13, 256GB, Midnight, stříbrná', 17000, 3, 3, 7, 9, 'Nová generace Apple iPhone s dobrou fotosoustavou','Nová generace iPhone s vylepšenou duální fotosoustavou, nekompromisním výkonem čipu A15 Bionic, displejem OLED Super Retina XDR, připojením 5G. 6.1" displej s širokým barevným gamutem, technologií TrueTone a Haptic Touch, rozlišení 2532 × 1170 bodů, 128GB interní paměti; duální 12MP fotoaparát, přední 12MP kamera TrueDepth s Face ID, Bluetooth 5.0, NFC, Wi-Fi, rozhraní Lightning, podpora bezdrátového nabíjení Qi a MagSafe, rychlé nabíjení 50 % za 30 minut, operační systém iOS 15.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Apple Watch Series 9 41mm Midnight Sport Loop', 11590, 4, 3, 8, 14 ,'Chytré hodinky od firmy Apple','Chytré hodinky, OLED displej (41 mm, stále zapnutý, až 2000 nitů), ovládání gesty / korunka Digital Crown s haptickou odezvou / boční tlačítko, měření saturace kyslíkem, EKG, snímání teploty, menstruačního cyklu, voděodolné, obsahují kompas, výškoměr, akcelerometr, gyroskop; výdrž baterie až 18 hodin při standardním používání, hliníkové pouzdro. Rozhraní: reproduktor a mikrofon, WiFi 4, Bluetooth 5.3, GPS, magnetický rychlonabíjecí USB‑C kabel. Materiál pouzdra: hliník.');
+
+INSERT INTO products(name, price, category_id, maker_id, image_id, total_stock, short_desc, description) 
+VALUES ('Samsung Galaxy Watch6 44mm, Graphite', 8290, 4, 5, 9, 1 ,'Chytré hodinky od firmy Samsung','Chytré hodinky Samsung Galaxy Watch6, 44mm, 1.47" Super AMOLED displej, 2 tlačítka, digitální luneta. Procesor Exynos W930 (2 jádra, 1.4 GHz), 2GB RAM a 16GB interní paměť, virtuální trenér (běh), měření stresu a spánku, připomenutí pohybu, detekce chrápání, platby Google Pay, hlasový asistent, telefonování z hodinek, notifikace z telefonu, Google Play a Mapy, přehrávač hudby a další, baterie 425 mAh (výdrž až 40 hod.), verze s Bluetooth a WiFi, materiál hliník.')
+
+
+
+
+
+

@@ -11,12 +11,13 @@ export const ProductDetail = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
             {product ? (
-            <Card className="cardProduct" sx={{ backgroundColor: '#4500CC', color: '#FFFFFF', position: 'relative', width: '35vw', height: '80vh', borderRadius: '2%', border: '5px solid #4500CC' }}>
-                <img src={product.productImage} alt={product.productName} className="imageProduct" style={{ display: 'block', padding: '60px', backgroundColor: '#FFFFFF', borderRadius: '1.5%', marginTop: '5vh' }} onError={(e) => console.error("image failed to load")} />
+            <Card className="product-card" sx={{ backgroundColor: '#4500CC', color: '#FFFFFF', position: 'relative', width: '35vw', height: '80vh', borderRadius: '2%', border: '5px solid #4500CC' }}>
+                <img src={product.productImage} alt={product.productName} className="product-image" style={{ display: 'block', padding: '60px', backgroundColor: '#FFFFFF', borderRadius: '1.5%', marginTop: '5vh' }} onError={(e) => console.error("image failed to load")} />
                 <CardContent sx={{ marginBottom: '64px' }}>
                     <Typography gutterBottom variant="h2">
                             {product.productName}
                     </Typography>
+                    <Typography variant="body1" sx={{textAlign: 'left', margin: '20px 10px 10px 10px'}}>{product.description}</Typography>
                     <Typography variant="body3" sx={{ position: 'absolute', left: 10, bottom: 40, color: 'red', fontWeight: '500', background: '#FFFFFF', padding: '5px', border: '2px solid red' }}>
                         {product.price} Kč
                     </Typography>

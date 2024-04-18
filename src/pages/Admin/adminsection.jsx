@@ -62,7 +62,7 @@ export const AdminSection = ({ PRODUCTS }) => {
             <div className="productContainer">
                 <div className='productGrid'>
                     {sortedProducts.map((p) => (
-                        <Card key={p.id} className="productCard" sx={{backgroundColor: '#4500CC', color:'#FFFFFF', position: 'relative', width: '18vw', height: '70vh', borderRadius: '2%', border: '5px solid #4500CC'}}>
+                        <Card key={p.id} className="productCard" sx={{backgroundColor: '#4500CC', color:'#FFFFFF', position: 'relative', width: '18vw', height: '70vh', borderRadius: '2%', border: '5px solid #4500CC', marginLeft: '5vw'}}>
                             <img
                                 src={p.productImage}
                                 alt={p.productName}

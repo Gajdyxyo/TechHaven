@@ -56,19 +56,26 @@ export const Navbar = ({ isLoggedIn, setIsLoggedIn, setHasInteracted }) => {
                                 marginTop: '10px',
                             }}
                         >
-                            <MenuItem component={Link} to="/profile" onClick={handleClose} sx={{color: '#4500CC'}}>Update Profile</MenuItem>
-                            <MenuItem component={Link} to="/shipping" onClick={handleClose} sx={{color: '#4500CC'}}>Update Shipping</MenuItem>
+                            <MenuItem component={Link} to="/profile" onClick={handleClose} sx={{color: '#4500CC'}}>Upravit profil</MenuItem>
+                            <MenuItem component={Link} to="/shipping" onClick={handleClose} sx={{color: '#4500CC'}}>Upravit dodávací údaje</MenuItem>
                         </Menu>
                     </>
                 )}
                 </>
                 <>
                 {isAdmin === '1' ? (
+                    <div>
                     <Link to="/AdminSection" sx={{ textDecoration: 'none' }}>
                         <Button variant="linkBttns" sx={{color: '#ffffff', border: '1px solid #4500CC', '&:hover': { backgroundColor: '#FFFFFF', border: '1px solid #FFFFFF', color: '#4500CC'}}}>
                             | Produkty - Admin |
                         </Button>
                     </Link>
+                    <Link to="/AddProduct" sx={{ textDecoration: 'none'}}>
+                        <Button variant="linkBttns" sx={{color: '#ffffff', border: '1px solid #4500CC', '&:hover': { backgroundColor: '#FFFFFF', border: '1px solid #FFFFFF', color: '#4500CC'}}}>
+                            | Přidat produkt |
+                        </Button>
+                    </Link>
+                    </div>
                 )
                 :
                 (

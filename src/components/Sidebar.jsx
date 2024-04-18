@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { Box, Paper, InputBase, Button, FormGroup, FormControlLabel, Checkbox, Slider, Typography, Select, MenuItem } from '@mui/material'
 import { MagnifyingGlass, CaretDown } from "phosphor-react"
-import './sidebar.css'
 
 export const Sidebar = ({ products, setFilteredCategories, setFilteredMakers, setSearchQuery, setPriceFilter, setSortOption}) => {
     const maxPrice = Math.max(...products.map(product => product.price));

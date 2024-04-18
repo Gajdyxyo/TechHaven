@@ -4,7 +4,7 @@ import { ShopContext } from '../../context/Shop-Context'
 import { Card, CardContent, Typography, Button } from '@mui/material'
 
 export const Product = (props) => {
-    const { id, productName, price, productImage, description, stock } = props.data;
+    const { id, productName, price, productImage, shortDesc, stock } = props.data;
     const { addToCart, cartItems } = useContext(ShopContext);
     const cartItemAmount = cartItems[id];
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ export const Product = (props) => {
                     {productName}
                   </Typography>
                 </Button>
-                <Typography variant="body1" sx={{textAlign: 'left', margin: '20px 10px 10px 10px'}}>{description}</Typography>
+                <Typography variant="body1" sx={{textAlign: 'left', margin: '20px 10px 10px 10px'}}>{shortDesc}</Typography>
                 <Typography variant="body2" sx={{ position: 'absolute', left: 10, bottom: 40, color: 'red', fontWeight: '500', background: '#FFFFFF', padding: '0.2vw', border: '2px solid red' }}>
                     {price} Kč
                 </Typography>
